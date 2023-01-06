@@ -1,0 +1,33 @@
+# dc -f separate.yml build --no-cache 
+# dc -f separate.yml up --build --remove-orphans
+# dc -f separate.yml up --build -d
+
+# https://docs.docker.com/compose/compose-file/
+
+version: "3.9"
+services:
+  node-mycrud:
+    container_name: node-mycrud
+    image: node:17
+    build: ./backend
+    restart: always
+    ports:
+     - "9001:9001"
+    depends_on:
+      mysql-mycrud:
+        condition: service_healthy
+  nginx-mycrud:
+    container_name: nginx-mycrud
+    image: nginx:latest
+    build: ./frontend
+    ports:
+      - "80:80"
+  mysql-mycrud:
+    container_name: mysql-mycrud
+    image: mysql:5.7
+    build: ./db
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database:/var/lib/mysql
