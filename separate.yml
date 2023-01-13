@@ -6,24 +6,24 @@
 
 version: "3.9"
 services:
-  node-mycrud:
-    container_name: node-mycrud
+  backend:
+    container_name: backend
     image: node:17
     build: ./backend
     restart: always
     ports:
      - "9001:9001"
     depends_on:
-      mysql-mycrud:
+      db:
         condition: service_healthy
-  nginx-mycrud:
-    container_name: nginx-mycrud
+  frontend:
+    container_name: frontend
     image: nginx:latest
     build: ./frontend
     ports:
       - "80:80"
-  mysql-mycrud:
-    container_name: mysql-mycrud
+  db:
+    container_name: db
     image: mysql:5.7
     build: ./db
     restart: always
